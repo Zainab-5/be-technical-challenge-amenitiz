@@ -1,24 +1,39 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Ruby Checkout System - CLI APP
+This is a simple ruby checkout system that allows you to scan products, apply different PRICING RULES, and calculate total directly in the terminal.
 
-Things you may want to cover:
+📖 Features
 
-* Ruby version
+🏷 Dynamic Pricing Rules: Easily add or update rules like Buy One Get One Free or bulk discounts.
 
-* System dependencies
+🛍 Interactive CLI: Scan items, view the total, and remove items if needed.
 
-* Configuration
+🧩 Modular Design: Easy to extend for new pricing rules or products.
 
-* Database creation
+⚙️ Installation
 
-* Database initialization
+1. Clone the repository
 
-* How to run the test suite
+   git clone <https://github.com/Zainab-5/amenitiz-be-technical-challenge.git>
 
-* Services (job queues, cache servers, search engines, etc.)
+   cd amenitiz-be-technical-challenge
+   
+2. Install dependencies
 
-* Deployment instructions
+   bundle install
 
-* ...
+3. Run CLI
+
+   chmod +x bin/cli
+
+   bin/cli
+
+🧪 Running Tests
+
+     bundle exec rspec
+
+🛠 Adding Pricing Rules
+
+    Open bulk_price_rule.rb or buy_one_get_one_rule.rb in app/services/ and define your new rules.
+    The Checkout class will automatically apply them when calculating totals.
