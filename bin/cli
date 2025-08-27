@@ -1,0 +1,115 @@
+#!/usr/bin/env ruby
+# require_relative '../config/environment'
+# require_relative '../app/services/bulk_price_rule'
+# require_relative '../app/services/buy_one_get_one_rule'
+
+# rules = [
+#   BuyOneGetOneRule.new("GR1"),
+#   BulkPriceRule.new("SR1", 3, 4.50),
+#   BulkPriceRule.new("CF1", 3, (11.23 * 2/3.0).round(2))
+# ]
+
+# co = Checkout.new(rules)
+# products = Product.all.index_by(&:code)
+
+# loop do
+#   print "Scan item code (or 'done'): "
+#   input = STDIN.gets.chomp
+#   break if input.downcase == 'done'
+#   if products[input]
+#     co.scan(products[input])
+#   else
+#     puts "Unknown product code"
+#   end
+# end
+
+# puts "Total: #{co.total}€"
+
+
+#!/usr/bin/env ruby
+require_relative '../config/environment'
+require_relative '../app/services/bulk_price_rule'
+require_relative '../app/services/buy_one_get_one_rule'
+
+# Define pricing rules
+rules = [
+  BuyOneGetOneRule.new("GR1"),
+  BulkPriceRule.new("SR1", 3, 4.50),
+  BulkPriceRule.new("CF1", 3, (11.23 * 2/3.0).round(2))
+]
+
+co = Checkout.new(rules)
+products = Product.all.index_by(&:code)
+
+def display_menu(products)
+  puts "\n=== Available Products ==="
+  products.each do |code, product|
+    puts "#{code} - #{product.name} (#{product.price}€)"
+  end
+  puts "=========================="
+end
+
+def display_cart(checkout)
+  puts "\nCurrent Cart:"
+  
+  if checkout.cart_items.any?
+    checkout.total
+    checkout.cart_items.each do |item|
+      puts "- #{item.name} (#{item.price}€)"
+    end
+    puts "Subtotal: #{checkout.total}€"
+  else
+    puts "Cart is empty."
+  end
+end
+
+def show_welcome
+  puts "======================================"
+  puts "   Welcome to Ruby Checkout System!   "
+  puts "======================================"
+  puts "Scan product codes to add items to cart."
+  puts "Type 'remove CODE' to remove an item."
+  puts "Type 'done' when you're ready to checkout."
+  puts
+end
+
+show_welcome
+
+loop do
+  display_menu(products)
+  print "\nOptions: [scan <code>] [remove <code>] [done] [cart] > "
+  input = STDIN.gets.chomp.strip
+
+  case input
+  when /^scan\s+(\w+)$/i
+    code = $1.upcase
+    if products[code]
+      co.scan(products[code])
+      puts "#{products[code].name} added to cart."
+    else
+      puts "Unknown product code."
+    end
+
+  when /^remove\s+(\w+)$/i
+    code = $1.upcase
+    if co.remove(code)
+      puts "#{code} removed from cart."
+    else
+      puts "Item not in cart."
+    end
+
+  when 'cart'
+    display_cart(co)
+
+  when 'done'
+    break
+
+  else
+    puts "Unknown command. Try again."
+  end
+end
+
+puts "\n=== Checkout Summary ==="
+display_cart(co)
+puts "Total after discounts: #{co.total}€"
+puts "Thank you for shopping!"
