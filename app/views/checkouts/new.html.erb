@@ -1,0 +1,44 @@
+<!-- app/views/checkouts/new.html.erb -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checkout</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div class="container">
+    <h1>Checkout</h1>
+
+    <%= form_with url: checkouts_path, method: :post, local: true, data: { turbo: false } do %>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price (€)</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @products.each do |p| %>
+            <tr>
+              <td><%= p.name %></td>
+              <td><%= p.price %></td>
+              <td>
+                <input type="number" name="quantity[<%= p.code %>]" value="0" min="0">
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <button type="submit">Calculate Total</button>
+    <% end %>
+
+    <% if @total.present? %>
+      <div class="total">
+        Total: <%= @total.round(2) %>€
+      </div>
+    <% end %>
+  </div>
+</body>
+</html>
