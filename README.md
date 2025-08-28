@@ -37,3 +37,11 @@ This is a simple ruby checkout system that allows you to scan products, apply di
 
     Open bulk_price_rule.rb or buy_one_get_one_rule.rb in app/services/ and define your new rules.
     The Checkout class will automatically apply them when calculating totals.
+
+Frontend preview
+
+- There is a very simple html page added to preview the selected products, with total price, after applying pricing rules according to each product.
+- This is a very basic level page, not a professional one, just added to show the price calculations
+
+
+<img width="1130" height="720" alt="Screenshot 2025-08-28 at 2 54 38 PM" src="https://github.com/user-attachments/assets/50378876-a07a-4738-8020-c03020a861f7" />
